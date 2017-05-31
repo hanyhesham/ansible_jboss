@@ -1,0 +1,34 @@
+---
+# tasks file for common
+
+
+#- name: change listening ip for master
+#  replace:
+#    path: /opt/jboss-eap-7.0/domain/configuration/host-master.xml
+#    regexp: '127.0.0.1'
+#    replace: 'master'
+#    backup: yes
+
+- name: check user test exist
+  command: grep -c '^test' /etc/passwd
+  register: exist
+  failed_when: "exist.rc == 2"
+  changed_when: false
+
+- name: add test user
+  command: useradd test
+  when: "exist.rc == 1"
+
+- name: check test directory existence
+  stat:
+    path: /opt/test.zip
+  register: test
+
+- name: Copy test directory
+  copy:
+    src: ../templates/test.zip
+    dest: /opt/test.zip
+    owner: centos
+    group: centos
+    mode: '0644' 
+  when: "test.stat.exists == false"

@@ -1,0 +1,4 @@
+---
+# vars file for common
+
+jboss_dir: 'jboss-eap-7.0'

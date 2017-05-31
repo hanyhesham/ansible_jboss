@@ -1,0 +1,50 @@
+---
+# tasks file for common
+
+- name: upgrade all packages
+  yum: name=* state=latest
+
+- name: install java 1.8
+  package:
+    name: java-1.8.0-openjdk-devel
+    state: latest
+
+- name: install unzip
+  package:
+    name: unzip
+    state: latest
+
+- name: check jboss directory existence
+  stat:
+    path: /opt/{{ jboss }}
+  register: jboss
+
+- name: Copy jboss app
+  copy:
+    src: ../templates/{{ jboss }}
+    dest: /opt/{{ jboss }}
+    mode: '0644'
+  when: "jboss.stat.exists == false"
+
+- unarchive:
+    src: /opt/jboss.zip
+    dest: /opt/
+    remote_src: True
+
+- name: check user jboss exist
+  command: grep -c '^jboss' /etc/passwd
+  register: exist
+  failed_when: "exist.rc == 2"
+  changed_when: false
+
+- name: add jboss user
+  command: useradd jboss
+  when: "exist.rc == 1"
+
+- name: change owner of jboss home
+  file:
+    path: /opt/jboss-eap-7.0
+    state: directory
+    owner: jboss
+    recurse: yes
+
