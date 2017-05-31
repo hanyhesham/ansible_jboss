@@ -4,7 +4,24 @@
 - name: add slave user
   command: ./bin/add-user.sh -e -cw -u slave password chdir=/opt/{{ jboss_dir }}
 
-- name: start jboss server
-  shell: su jboss -c "nohup ./bin/domain.sh --host-config=host-master.xml
-         -bmanagement=host-master -b=master > /dev/null 2>&1 &" chdir=/opt/{{ jboss_dir }}
+- name: Copy jboss config file
+  copy:
+    src: master_conf.j2
+    dest: /etc/default/jboss-eap.conf
 
+- name: Copy jboss script 
+  copy:
+    src: jboss-eap-rhel.sh
+    dest: /etc/init.d
+    mode: '0700'
+
+- name: enable jboss server script
+  shell: chkconfig --add jboss-eap-rhel.sh
+
+- name: enable jboss server on startup
+  shell: chkconfig jboss-eap-rhel.sh on
+
+- name: restart jboss in all cases 
+  service:
+    name: jboss-eap-rhel
+    state: restarted

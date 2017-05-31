@@ -16,14 +16,13 @@
 
 - name: check jboss directory existence
   stat:
-    path: /opt/{{ jboss }}
+    path: /opt/jboss.zip
   register: jboss
 
 - name: Copy jboss app
-  copy:
-    src: ../templates/{{ jboss }}
-    dest: /opt/{{ jboss }}
-    mode: '0644'
+  copy: 
+    src: jboss.zip 
+    dest: /opt/jboss.zip
   when: "jboss.stat.exists == false"
 
 - unarchive:
