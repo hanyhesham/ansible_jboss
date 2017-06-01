@@ -2,26 +2,26 @@
 # tasks file for common
 
 - name: add slave user
-  command: ./bin/add-user.sh -e -cw -u slave password chdir=/opt/{{ jboss_dir }}
+  command: ./bin/add-user.sh -e -cw -u slave password chdir=/opt/{{ wildfly_dir }}
 
-- name: Copy jboss config file
+- name: Copy wildfly config file
   copy:
     src: master_conf.j2
-    dest: /etc/default/jboss-eap.conf
+    dest: /etc/default/wildfly.conf
 
-- name: Copy jboss script 
+- name: Copy wildfly script 
   copy:
-    src: jboss-eap-rhel.sh
+    src: wildfly-init-redhat.sh
     dest: /etc/init.d
     mode: '0700'
 
-- name: enable jboss server script
-  shell: chkconfig --add jboss-eap-rhel.sh
+- name: enable wildfly server script
+  shell: chkconfig --add wildfly-init-redhat.sh
 
-- name: enable jboss server on startup
-  shell: chkconfig jboss-eap-rhel.sh on
+- name: enable wildfly server on startup
+  shell: chkconfig wildfly-init-redhat.sh on
 
-- name: restart jboss in all cases 
+- name: restart wildfly in all cases 
   service:
-    name: jboss-eap-rhel
+    name: wildfly-init-redhat
     state: restarted

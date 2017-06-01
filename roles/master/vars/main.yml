@@ -1,4 +1,4 @@
 ---
 # vars file for common
 
-jboss_dir: 'jboss-eap-7.0'
+wildfly_dir: 'wildfly-9.0.0.Final'

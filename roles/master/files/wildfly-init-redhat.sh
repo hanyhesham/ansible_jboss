@@ -1,12 +1,12 @@
 #!/bin/sh
 #
-# JBoss EAP control script
+# WildFly control script
 #
 # chkconfig: - 80 20
-# description: JBoss EAP startup script
-# processname: jboss-eap
-# pidfile: /var/run/jboss-eap/jboss-eap.pid
-# config: /etc/default/jboss-eap.conf
+# description: WildFly startup script
+# processname: wildfly
+# pidfile: /var/run/wildfly/wildfly.pid
+# config: /etc/default/wildfly.conf
 #
 
 # Source function library.
@@ -16,9 +16,9 @@
 [ -r /etc/java/java.conf ] && . /etc/java/java.conf
 export JAVA_HOME
 
-# Load JBoss EAP init.d configuration.
+# Load JBoss AS init.d configuration.
 if [ -z "$JBOSS_CONF" ]; then
-	JBOSS_CONF="/etc/default/jboss-eap.conf"
+	JBOSS_CONF="/etc/default/wildfly.conf"
 fi
 
 [ -r "$JBOSS_CONF" ] && . "${JBOSS_CONF}"
@@ -26,17 +26,17 @@ fi
 # Set defaults.
 
 if [ -z "$JBOSS_HOME" ]; then
-	JBOSS_HOME=/opt/jboss-eap
+	JBOSS_HOME=/opt/wildfly
 fi
 export JBOSS_HOME
 
 if [ -z "$JBOSS_PIDFILE" ]; then
-	JBOSS_PIDFILE=/var/run/jboss-eap/jboss-eap.pid
+	JBOSS_PIDFILE=/var/run/wildfly/wildfly.pid
 fi
 export JBOSS_PIDFILE
 
 if [ -z "$JBOSS_CONSOLE_LOG" ]; then
-	JBOSS_CONSOLE_LOG=/var/log/jboss-eap/console.log
+	JBOSS_CONSOLE_LOG=/var/log/wildfly/console.log
 fi
 
 if [ -z "$STARTUP_WAIT" ]; then
@@ -48,10 +48,10 @@ if [ -z "$SHUTDOWN_WAIT" ]; then
 fi
 
 if [ -z "$JBOSS_LOCKFILE" ]; then
-	JBOSS_LOCKFILE=/var/lock/subsys/jboss-eap
+	JBOSS_LOCKFILE=/var/lock/subsys/wildfly
 fi
 
-# Startup mode of jboss-eap
+# Startup mode of wildfly
 if [ -z "$JBOSS_MODE" ]; then
 	JBOSS_MODE=standalone
 fi
@@ -62,7 +62,6 @@ if [ "$JBOSS_MODE" = "standalone" ]; then
 	if [ -z "$JBOSS_CONFIG" ]; then
 		JBOSS_CONFIG=standalone.xml
 	fi
-	JBOSS_MARKERFILE=$JBOSS_HOME/standalone/tmp/startup-marker
 else
 	JBOSS_SCRIPT=$JBOSS_HOME/bin/domain.sh
 	if [ -z "$JBOSS_DOMAIN_CONFIG" ]; then
@@ -71,11 +70,9 @@ else
 	if [ -z "$JBOSS_HOST_CONFIG" ]; then
 		JBOSS_HOST_CONFIG=host.xml
 	fi
-	JBOSS_MARKERFILE=$JBOSS_HOME/domain/tmp/startup-marker
 fi
 
-prog='jboss-eap'
-currenttime=$(date +%s%N | cut -b1-13)
+prog='wildfly'
 
 start() {
 	echo -n "Starting $prog: "
@@ -99,19 +96,15 @@ start() {
 	if [ ! -z "$JBOSS_USER" ]; then
 		if [ "$JBOSS_MODE" = "standalone" ]; then
 			if [ -r /etc/rc.d/init.d/functions ]; then
-			        cd $JBOSS_HOME
-				daemon --user $JBOSS_USER "LAUNCH_JBOSS_IN_BACKGROUND=1 JBOSS_PIDFILE=$JBOSS_PIDFILE $JBOSS_SCRIPT -c $JBOSS_CONFIG $JBOSS_OPTS &" >> $JBOSS_CONSOLE_LOG 2>&1
-				cd -
+				daemon --user $JBOSS_USER LAUNCH_JBOSS_IN_BACKGROUND=1 JBOSS_PIDFILE=$JBOSS_PIDFILE $JBOSS_SCRIPT -c $JBOSS_CONFIG $JBOSS_OPTS >> $JBOSS_CONSOLE_LOG 2>&1 &
 			else
-				su - $JBOSS_USER -c "cd $JBOSS_HOME; LAUNCH_JBOSS_IN_BACKGROUND=1 JBOSS_PIDFILE=$JBOSS_PIDFILE $JBOSS_SCRIPT -c $JBOSS_CONFIG $JBOSS_OPTS" >> $JBOSS_CONSOLE_LOG 2>&1 &
+				su - $JBOSS_USER -c "LAUNCH_JBOSS_IN_BACKGROUND=1 JBOSS_PIDFILE=$JBOSS_PIDFILE $JBOSS_SCRIPT -c $JBOSS_CONFIG $JBOSS_OPTS" >> $JBOSS_CONSOLE_LOG 2>&1 &
 			fi
 		else
 			if [ -r /etc/rc.d/init.d/functions ]; then
-			        cd $JBOSS_HOME
-				daemon --user $JBOSS_USER "LAUNCH_JBOSS_IN_BACKGROUND=1 JBOSS_PIDFILE=$JBOSS_PIDFILE $JBOSS_SCRIPT --domain-config=$JBOSS_DOMAIN_CONFIG --host-config=$JBOSS_HOST_CONFIG $JBOSS_OPTS &" >> $JBOSS_CONSOLE_LOG 2>&1
-				cd -
+				daemon --user $JBOSS_USER LAUNCH_JBOSS_IN_BACKGROUND=1 JBOSS_PIDFILE=$JBOSS_PIDFILE $JBOSS_SCRIPT --domain-config=$JBOSS_DOMAIN_CONFIG --host-config=$JBOSS_HOST_CONFIG $JBOSS_OPTS >> $JBOSS_CONSOLE_LOG 2>&1 &
 			else
-				su - $JBOSS_USER -c "cd $JBOSS_HOME; LAUNCH_JBOSS_IN_BACKGROUND=1 JBOSS_PIDFILE=$JBOSS_PIDFILE $JBOSS_SCRIPT --domain-config=$JBOSS_DOMAIN_CONFIG --host-config=$JBOSS_HOST_CONFIG $JBOSS_OPTS" >> $JBOSS_CONSOLE_LOG 2>&1 &
+				su - $JBOSS_USER -c "LAUNCH_JBOSS_IN_BACKGROUND=1 JBOSS_PIDFILE=$JBOSS_PIDFILE $JBOSS_SCRIPT --domain-config=$JBOSS_DOMAIN_CONFIG --host-config=$JBOSS_HOST_CONFIG $JBOSS_OPTS" >> $JBOSS_CONSOLE_LOG 2>&1 &
 			fi
 		fi
 	fi
@@ -121,23 +114,14 @@ start() {
 
 	until [ $count -gt $STARTUP_WAIT ]
 	do
+		grep 'WFLYSRV0025:' $JBOSS_CONSOLE_LOG > /dev/null
+		if [ $? -eq 0 ] ; then
+			launched=true
+			break
+		fi
 		sleep 1
 		let count=$count+1;
-		if [ -f $JBOSS_MARKERFILE ]; then
-			markerfiletimestamp=$(grep -o '[0-9]*' $JBOSS_MARKERFILE) > /dev/null
-			if [ "$markerfiletimestamp" -gt "$currenttime" ] ; then
-				grep -i 'success:' $JBOSS_MARKERFILE > /dev/null
-				if [ $? -eq 0 ] ; then
-					launched=true
-					break
-				fi
-			fi
-		fi
 	done
-
-	if [ "$launched" = "false" ] ; then
-		echo "$prog started with errors, please see server log for details"
-	fi
 
 	touch $JBOSS_LOCKFILE
 	success
@@ -202,7 +186,7 @@ case "$1" in
 		;;
 	*)
 		## If no parameters are given, print which are avaiable.
-		echo "Usage: $0 {start|stop|status|restart}"
+		echo "Usage: $0 {start|stop|status|restart|reload}"
 		exit 1
 		;;
 esac

@@ -1,17 +1,17 @@
 # General configuration for the init.d scripts,
-# not necessarily for JBoss EAP itself.
-# default location: /etc/default/jboss-eap
+# not necessarily for JBoss AS itself.
+# default location: /etc/default/wildfly
 
 ## Location of JDK
 # JAVA_HOME="/usr/lib/jvm/default-java"
 
-## Location of JBoss EAP
-JBOSS_HOME="/opt/jboss-eap-7.0"
+## Location of WildFly
+JBOSS_HOME="/opt/wildfly-9.0.0.Final"
 
 ## The username who should own the process.
-JBOSS_USER=jboss
+JBOSS_USER=wildfly
 
-## The mode JBoss EAP should start, standalone or domain
+## The mode WildFly should start, standalone or domain
 JBOSS_MODE=domain
 
 ## Configuration for standalone mode
@@ -19,16 +19,16 @@ JBOSS_MODE=domain
 
 ## Configuration for domain mode
 JBOSS_DOMAIN_CONFIG=domain.xml
-JBOSS_HOST_CONFIG=host-slave.xml
+JBOSS_HOST_CONFIG=host-master.xml
 
 ## The amount of time to wait for startup
-STARTUP_WAIT=15
+#STARTUP_WAIT=10
 
 ## The amount of time to wait for shutdown
-SHUTDOWN_WAIT=10
+#SHUTDOWN_WAIT=10
 
 ## Location to keep the console log
-JBOSS_CONSOLE_LOG="/var/log/jboss-eap/console.log"
-
+JBOSS_CONSOLE_LOG="/var/log/wildfly/console.log"
+ 
 ## Additionals args to include in startup
-JBOSS_OPTS="-Djboss.domain.master.address=host-master -Djboss.bind.address=host-slave -Djboss.bind.address.management=host-slave "
+JBOSS_OPTS="-Djboss.domain.master.address=master -Djboss.bind.address=slave -Djboss.bind.address.management=slave "
