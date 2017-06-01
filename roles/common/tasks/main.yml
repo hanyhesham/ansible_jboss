@@ -1,50 +1,54 @@
 ---
 # tasks file for common
 
-- name: upgrade all packages
-  yum: name=* state=latest
+- block:
+  - name: upgrade all packages
+    yum: name=* state=latest
 
-- name: install java 1.8
-  package:
-    name: java-1.8.0-openjdk-devel
-    state: latest
+  - name: install java 1.8
+    package:
+      name: java-1.8.0-openjdk-devel
+      state: latest
 
-- name: install unzip
-  package:
-    name: unzip
-    state: latest
+  - name: install unzip
+    package:
+      name: unzip
+      state: latest
+  tags: [init]
 
-- name: check wildfly existence
-  stat:
-    path: /opt/wildfly.zip
-  register: ex
+- block:
+  - name: check wildfly existence
+    stat:
+      path: /opt/wildfly.zip
+    register: ex
 
-- name: download wildfly
-  get_url:
-    url: http://download.jboss.org/wildfly/9.0.0.Final/wildfly-9.0.0.Final.zip
-    dest: /opt/wildfly.zip
-    mode: 0740
-  when: "ex.stat.exists == false"
+  - name: download wildfly
+    get_url:
+      url: http://download.jboss.org/wildfly/9.0.0.Final/wildfly-9.0.0.Final.zip
+      dest: /opt/wildfly.zip
+      mode: 0740
+    when: "ex.stat.exists == false"
 
-- unarchive:
-    src: /opt/wildfly.zip
-    dest: /opt/
-    remote_src: True
+  - unarchive:
+      src: /opt/wildfly.zip
+      dest: /opt/
+      remote_src: True
 
-- name: check user wildfly exist
-  command: grep -c '^wildfly' /etc/passwd
-  register: exist
-  failed_when: "exist.rc == 2"
-  changed_when: false
+  - name: check user wildfly exist
+    command: grep -c '^wildfly' /etc/passwd
+    register: exist
+    failed_when: "exist.rc == 2"
+    changed_when: false
 
-- name: add wildfly user
-  command: useradd wildfly
-  when: "exist.rc == 1"
+  - name: add wildfly user
+    command: useradd wildfly
+    when: "exist.rc == 1"
 
-- name: change owner of wildfly home
-  file:
-    path: /opt/wildfly-9.0.0.Final
-    state: directory
-    owner: wildfly
-    recurse: yes
+  - name: change owner of wildfly home
+    file:
+      path: /opt/wildfly-9.0.0.Final
+      state: directory
+      owner: wildfly
+      recurse: yes
+  tags: [config_dir]
 
