@@ -2,3 +2,6 @@
 # vars file for common
 
 jboss: 'jboss.zip'
+java_version: 'java-1.8.0-openjdk-devel'
+wildfly_src: 'wildfly.zip'
+wildfly_ver: 'wildfly-9.0.0.Final'

@@ -1,16 +1,16 @@
 ---
 
-- hosts: controller
-  become: yes
-  roles:
-  - common
-  - master
+#- hosts: controller
+#  become: yes
+#  roles:
+#  - common
+#  - master
   
 
 - hosts: slave
   become: yes
   roles:
-  - common
+#  - common
   - slave
 
 

@@ -15,7 +15,7 @@
 
   - name: Copy wildfly script 
     copy:
-      src: wildfly-init-redhat.sh
+      src: "{{ wildfly_script }}"
       dest: /etc/init.d
       mode: '0700'
   tags: [config_slave]
@@ -23,10 +23,10 @@
 
 - block:
   - name: enable wildfly server script
-    shell: chkconfig --add wildfly-init-redhat.sh
+    shell: chkconfig --add "{{ wildfly_script }}"
 
   - name: enable wildfly server on startup
-    shell: chkconfig wildfly-init-redhat.sh on
+    shell: chkconfig "{{ wildfly_script }}" on
 
   - name: restart wildfly in all cases 
     service:

@@ -5,9 +5,9 @@
   - name: upgrade all packages
     yum: name=* state=latest
 
-  - name: install java 1.8
+  - name: install java 
     package:
-      name: java-1.8.0-openjdk-devel
+      name: "{{ java_version }}"
       state: latest
 
   - name: install unzip
@@ -19,18 +19,18 @@
 - block:
   - name: check wildfly existence
     stat:
-      path: /opt/wildfly.zip
+      path: "/opt/{{ wildfly_src }}"
     register: ex
 
   - name: download wildfly
     get_url:
       url: http://download.jboss.org/wildfly/9.0.0.Final/wildfly-9.0.0.Final.zip
-      dest: /opt/wildfly.zip
+      dest: "/opt/{{ wildfly_src }}"
       mode: 0740
     when: "ex.stat.exists == false"
 
   - unarchive:
-      src: /opt/wildfly.zip
+      src: "/opt/{{ wildfly_src }}"
       dest: /opt/
       remote_src: True
 
@@ -46,7 +46,7 @@
 
   - name: change owner of wildfly home
     file:
-      path: /opt/wildfly-9.0.0.Final
+      path: "/opt/{{ wildfly_ver }}"
       state: directory
       owner: wildfly
       recurse: yes
