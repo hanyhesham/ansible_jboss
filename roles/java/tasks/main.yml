@@ -2,7 +2,7 @@
 # tasks file for common
 
 - block:
- - name: upgrade all packages
+  - name: upgrade all packages
     yum: name=* state=latest
 
   - name: install java 

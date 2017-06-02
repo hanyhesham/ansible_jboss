@@ -2,7 +2,7 @@
 # tasks file for common
 - block:
   - name: add admin user
-    command: ./bin/add-user.sh -e -cw -u admin password chdir={{ wildfly_dir }}
+    command: ./bin/add-user.sh -e -cw -u admin password chdir="{{ path }}/{{ wildfly_dir }}"
 
   - name: Copy wildfly config file
     copy:

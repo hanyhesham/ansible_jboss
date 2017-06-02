@@ -2,3 +2,4 @@
 # vars file for common
 
 wildfly_dir: 'wildfly-9.0.0.Final'
+path: '/opt/'
