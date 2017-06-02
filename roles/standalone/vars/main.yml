@@ -2,4 +2,6 @@
 # vars file for common
 
 wildfly_dir: 'wildfly-9.0.0.Final'
-path: '/opt/'
+path: "/opt/"
+oracle: "/opt/wildfly-9.0.0.Final/modules/system/layers/base/com/oracle/main/"
+standalone: "/opt/wildfly-9.0.0.Final/standalone/configuration/"

@@ -17,6 +17,30 @@
   tags: [wildfly_config]
 
 - block:
+  - name: create oracle driver directory
+    file:
+      path: "{{ oracle }}"
+      state: directory
+      mode: 0755
+      owner: wildfly
+
+  - name: Copy oracle xml file
+    copy:
+      src: module.xml
+      dest: "{{ oracle }}"
+
+  - name: Copy oracle jar file
+    copy:
+      src: "/opt/ojdbc14.jar"
+      dest: "{{ oracle }}"
+
+  - name: Copy standalone xml file
+    copy:
+      src: standalone.xml
+      dest: "{{ standalone }}"
+  tags: [install oracle driver]
+
+- block:
   - name: enable wildfly server script
     shell: chkconfig --add wildfly.sh
 
