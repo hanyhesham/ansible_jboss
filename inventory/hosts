@@ -1,8 +1,5 @@
-[controller]
+[servers]
 
-master
-
-[slave]
-
-slave1
+server1
+server2
 

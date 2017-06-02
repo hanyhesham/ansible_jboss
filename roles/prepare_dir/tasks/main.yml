@@ -1,0 +1,28 @@
+---
+# tasks file for common
+
+- block:
+  - name: extract wildfly 
+    unarchive:
+      src: "{{ wildfly_src }}"
+      dest: "{{ path }}"
+      remote_src: True
+
+  - name: check user wildfly exist
+    command: grep -c '^wildfly' /etc/passwd
+    register: exist
+    failed_when: "exist.rc == 2"
+    changed_when: false
+
+  - name: add wildfly user
+    command: useradd wildfly
+    when: "exist.rc == 1"
+
+  - name: change owner of wildfly home
+    file:
+      path: "{{ wildfly_dir }}"
+      state: directory
+      owner: wildfly
+      recurse: yes
+  tags: [config_dir]
+

@@ -1,16 +1,9 @@
 ---
-# tasks file for slave
-
+# tasks file for common
 - block:
-  - name: Copy host-slave file
-    copy:
-      src: host-slave.xml
-      dest: /opt/{{ wildfly_dir }}/domain/configuration
-      owner: wildfly
-
   - name: Copy wildfly config file
     copy:
-      src: slave_conf.j2
+      src: conf.j2
       dest: /etc/default/wildfly.conf
 
   - name: Copy wildfly script 
@@ -18,8 +11,7 @@
       src: "{{ wildfly_script }}"
       dest: /etc/init.d
       mode: '0700'
-  tags: [config_slave]
-
+  tags: [wildfly_config]
 
 - block:
   - name: enable wildfly server script
@@ -32,7 +24,4 @@
     service:
       name: wildfly-init-redhat
       state: restarted
-  tags: [start_slave]
-
-
-
+  tags: [start_server]

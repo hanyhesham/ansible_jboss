@@ -1,17 +1,12 @@
 ---
 
-#- hosts: controller
-#  become: yes
-#  roles:
-#  - common
-#  - master
-  
-
-- hosts: slave
+- hosts: servers
   become: yes
   roles:
-#  - common
-  - slave
+  - init
+  - java 
+  - wildfly_config
+  - standalone_config
 
 
 
