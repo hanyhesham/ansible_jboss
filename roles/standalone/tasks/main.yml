@@ -28,16 +28,20 @@
     copy:
       src: module.xml
       dest: "{{ oracle }}"
+      owner: wildfly
 
   - name: Copy oracle jar file
     copy:
       src: "/opt/ojdbc14.jar"
       dest: "{{ oracle }}"
+      remote_src: True
+      owner: wildfly
 
   - name: Copy standalone xml file
     copy:
       src: standalone.xml
       dest: "{{ standalone }}"
+      owner: wildfly
   tags: [install oracle driver]
 
 - block:
