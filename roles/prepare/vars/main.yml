@@ -2,5 +2,5 @@
 # vars file for common
 
 wildfly_src: "/opt/wildfly.zip"
-wildfly_dir: "/opt/wildfly-9.0.0.Final"
-path: '/opt'
+wildfly_dir: "/home/admin/wildfly-9.0.0.Final"
+path: '/home/admin/'
