@@ -3,10 +3,9 @@
 - hosts: servers
   become: yes
   roles:
-  - init
   - java 
-  - wildfly_config
-  - standalone_config
+  - prepare
+  - standalone
 
 
 
