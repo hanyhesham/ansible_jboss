@@ -1,8 +1,6 @@
 ---
 # vars file for common
 
-java_version: 'jdk-8u131-linux-x64.rpm'
 wildfly_src: "/opt/wildfly.zip"
 wildfly_dir: "/opt/wildfly-9.0.0.Final"
 path: '/opt'
-unzip_version: 'unzip-6.0-16.el7.x86_64.rpm'

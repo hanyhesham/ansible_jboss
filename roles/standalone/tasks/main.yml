@@ -1,6 +1,9 @@
 ---
 # tasks file for common
 - block:
+  - name: add admin user
+    command: ./bin/add-user.sh -e -cw -u admin password chdir={{ wildfly_dir }}
+
   - name: Copy wildfly config file
     copy:
       src: conf.j2
@@ -8,20 +11,20 @@
 
   - name: Copy wildfly script 
     copy:
-      src: "{{ wildfly_script }}"
+      src: wildfly.sh
       dest: /etc/init.d
       mode: '0700'
   tags: [wildfly_config]
 
 - block:
   - name: enable wildfly server script
-    shell: chkconfig --add "{{ wildfly_script }}"
+    shell: chkconfig --add wildfly.sh
 
   - name: enable wildfly server on startup
-    shell: chkconfig "{{ wildfly_script }}" on
+    shell: chkconfig wildfly.sh on
 
   - name: restart wildfly in all cases 
     service:
-      name: wildfly-init-redhat
+      name: wildfly
       state: restarted
   tags: [start_server]

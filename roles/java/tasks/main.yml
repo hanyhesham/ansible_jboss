@@ -2,16 +2,16 @@
 # tasks file for common
 
 - block:
-#  - name: upgrade all packages
-#    yum: name=* state=latest
+ - name: upgrade all packages
+    yum: name=* state=latest
 
   - name: install java 
     yum:
-      name: "{{ java_version }}"
+      name: "{{ java }}"
       state: present
 
   - name: install unzip
     yum:
-      name: {{ unzip_version }}
+      name: "{{ unzip }}"
       state: present
   tags: [init]
