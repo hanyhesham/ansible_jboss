@@ -1,5 +1,5 @@
 ---
-# tasks file for common
+# tasks file
 
 - block:
   - name: upgrade all packages
@@ -7,11 +7,11 @@
 
   - name: install java 
     yum:
-      name: "{{ java }}"
+      name: "{{ java_src }}"
       state: present
 
   - name: install unzip
     yum:
-      name: "{{ unzip }}"
+      name: "{{ unzip_src }}"
       state: present
   tags: [init]

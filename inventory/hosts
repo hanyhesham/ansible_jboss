@@ -1,5 +1,4 @@
 [servers]
 
-server1 ansible_connection=local
-#server2
+localhost ansible_connection=local
 

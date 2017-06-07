@@ -1,55 +1,28 @@
 ---
-# tasks file for common
+# tasks file 
+
 - block:
   - name: add admin user
-    command: ./bin/add-user.sh -e -cw -u admin password chdir="{{ path }}/{{ wildfly_dir }}"
+    command: ./bin/add-user.sh -e -cw -u {{ admin_user }} {{ admin_password }} chdir="{{ wildfly_dir }}"
 
   - name: Copy wildfly config file
-    copy:
+    template:
       src: conf.j2
       dest: /etc/default/wildfly.conf
 
   - name: Copy wildfly script 
     copy:
-      src: wildfly.sh
+      src: wildfly
       dest: /etc/init.d
       mode: '0700'
   tags: [wildfly_config]
 
 - block:
-  - name: create oracle driver directory
-    file:
-      path: "{{ oracle }}"
-      state: directory
-      mode: 0755
-      owner: wildfly
-
-  - name: Copy oracle xml file
-    copy:
-      src: module.xml
-      dest: "{{ oracle }}"
-      owner: wildfly
-
-  - name: Copy oracle jar file
-    copy:
-      src: "/opt/ojdbc14.jar"
-      dest: "{{ oracle }}"
-      remote_src: True
-      owner: wildfly
-
-  - name: Copy standalone xml file
-    copy:
-      src: standalone.xml
-      dest: "{{ standalone }}"
-      owner: wildfly
-  tags: [install oracle driver]
-
-- block:
   - name: enable wildfly server script
-    shell: chkconfig --add wildfly.sh
+    shell: chkconfig --add wildfly
 
   - name: enable wildfly server on startup
-    shell: chkconfig wildfly.sh on
+    shell: chkconfig wildfly on
 
   - name: restart wildfly in all cases 
     service:

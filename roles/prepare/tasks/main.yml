@@ -1,28 +1,40 @@
 ---
-# tasks file for common
+# tasks file 
 
 - block:
+  - name: make directory for wildfly installation
+    file: 
+      path: "{{ wildfly_dir }}" 
+      state: directory 
+      owner: "{{ wildfly_user }}" 
+      group: "{{ wildfly_user }}" 
+      mode: "u=rwx,go=rx"
+
   - name: extract wildfly 
     unarchive:
       src: "{{ wildfly_src }}"
-      dest: "{{ path }}"
+      dest: "{{ wildfly_dir }}"
+      owner: "{{ wildfly_user }}" 
+      group: "{{ wildfly_user }}" 
+      extra_opts: "--strip-components=1"
       remote_src: True
 
-  - name: check user wildfly exist
-    command: grep -c '^wildfly' /etc/passwd
+  - name: "check user {{ wildfly_user }} exist"
+    command: "grep -c '^{{ wildfly_user }}' /etc/passwd"
     register: exist
     failed_when: "exist.rc == 2"
     changed_when: false
 
-  - name: add wildfly user
-    command: useradd wildfly
+  - name: " add {{ wildfly_user }} user" 
+    command: "useradd  {{ wildfly_user }}"
     when: "exist.rc == 1"
 
   - name: change owner of wildfly home
     file:
       path: "{{ wildfly_dir }}"
       state: directory
-      owner: wildfly
+      owner: "{{ wildfly_user }}"
+      group: "{{ wildfly_user }}" 
       recurse: yes
   tags: [config_dir]
 

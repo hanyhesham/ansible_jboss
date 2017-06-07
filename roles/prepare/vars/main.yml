@@ -1,6 +1,7 @@
 ---
-# vars file for common
-
-wildfly_src: "/opt/wildfly.zip"
-wildfly_dir: "/home/admin/wildfly-9.0.0.Final"
-path: '/home/admin/'
+# vars file 
+path_src: '/opt'
+path_dir: '/opt'
+wildfly_src: "{{ path_src }}/wildfly.tar.gz"
+wildfly_dir: "{{ path_dir }}/wildfly"
+wildfly_user: 'wildfly'

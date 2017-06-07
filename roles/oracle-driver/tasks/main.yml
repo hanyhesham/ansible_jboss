@@ -1,0 +1,35 @@
+---
+# tasks file 
+
+- block:
+  - name: create oracle driver directory
+    file:
+      path: "{{ oracle_path }}"
+      state: directory
+      mode: 0755
+      owner: "{{ wildfly_user }}"
+      group: "{{ wildfly_user }}" 
+
+  - name: Copy oracle xml file
+    copy:
+      src: module.xml
+      dest: "{{ oracle_path }}"
+      owner: "{{ wildfly_user }}"
+      group: "{{ wildfly_user }}" 
+
+
+  - name: Copy oracle jar file
+    copy:
+      src: "{{ oracle_src }}"
+      dest: "{{ oracle_path }}"
+      remote_src: True
+      owner: "{{ wildfly_user }}"
+      group: "{{ wildfly_user }}" 
+
+  - name: Copy standalone xml file
+    copy:
+      src: standalone.xml
+      dest: "{{ wildfly_dir }}/standalone/configuration/"
+      owner: "{{ wildfly_user }}"
+      group: "{{ wildfly_user }}" 
+  tags: [install oracle driver]
