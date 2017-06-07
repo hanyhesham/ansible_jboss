@@ -2,6 +2,17 @@
 # tasks file 
 
 - block:
+
+  - name: "check user {{ wildfly_user }} exist"
+    command: "grep -c '^{{ wildfly_user }}' /etc/passwd"
+    register: exist
+    failed_when: "exist.rc == 2"
+    changed_when: false
+
+  - name: " add {{ wildfly_user }} user" 
+    command: "useradd  {{ wildfly_user }}"
+    when: "exist.rc == 1"
+
   - name: make directory for wildfly installation
     file: 
       path: "{{ wildfly_dir }}" 
@@ -18,23 +29,5 @@
       group: "{{ wildfly_user }}" 
       extra_opts: "--strip-components=1"
       remote_src: True
-
-  - name: "check user {{ wildfly_user }} exist"
-    command: "grep -c '^{{ wildfly_user }}' /etc/passwd"
-    register: exist
-    failed_when: "exist.rc == 2"
-    changed_when: false
-
-  - name: " add {{ wildfly_user }} user" 
-    command: "useradd  {{ wildfly_user }}"
-    when: "exist.rc == 1"
-
-  - name: change owner of wildfly home
-    file:
-      path: "{{ wildfly_dir }}"
-      state: directory
-      owner: "{{ wildfly_user }}"
-      group: "{{ wildfly_user }}" 
-      recurse: yes
   tags: [config_dir]
 

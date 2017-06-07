@@ -9,9 +9,4 @@
     yum:
       name: "{{ java_src }}"
       state: present
-
-  - name: install unzip
-    yum:
-      name: "{{ unzip_src }}"
-      state: present
   tags: [init]

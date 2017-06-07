@@ -4,16 +4,16 @@
 - block:
   - name: create oracle driver directory
     file:
-      path: "{{ oracle_path }}"
+      path:  "{{ oracle_path }}"
       state: directory
-      mode: 0755
+      mode:  0755
       owner: "{{ wildfly_user }}"
       group: "{{ wildfly_user }}" 
 
   - name: Copy oracle xml file
-    copy:
-      src: module.xml
-      dest: "{{ oracle_path }}"
+    template:
+      src:   module.xml.j2
+      dest:  "{{ oracle_path }}/module.xml"
       owner: "{{ wildfly_user }}"
       group: "{{ wildfly_user }}" 
 

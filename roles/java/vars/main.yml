@@ -3,4 +3,3 @@
 
 path: '/opt'
 java_src: "{{ path }}/jdk-8u131-linux-x64.rpm"
-unzip_src: "{{ path }}/unzip-6.0-16.el7.x86_64.rpm"
